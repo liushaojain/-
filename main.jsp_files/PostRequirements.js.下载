@@ -1,0 +1,254 @@
+jQuery(document).ready(function(){
+	var userid = jQuery("#p").val();
+	
+	var workcode="";
+	
+	 jQuery.ajax({
+	        type:"GET",
+	        url:"/hc/employee/search/g/GetWorkCode.jsp",
+	        dataType:"json",
+	        async : false,
+	        data : {
+				"userid":userid//传hrmresource id
+			},
+	        success : function(data){
+	        	workcode=data.gongh;//获取到工号
+	        }
+	    });
+	
+    jQuery.ajax({
+        type:"GET",
+        url:"/hc/employee/search/g/PostRequirements.jsp",
+        dataType:"json",
+        async : false,
+        data : {
+			"workcode":workcode
+		},
+        success : function(data){
+        	//1.领导力
+            var leadership = data["arrayOfQUALI_MATCH1"];//专业素质数据
+            var leadership_table = jQuery("#leadership_table");//对应表格
+            var table3 = [];
+            for (i3 = 0; i3 < leadership.length; i3++) {	
+            	var xh3 = i3 + 1;
+            	table3.push('<tr><td class="ht-head" width="10%" nowrap="" id="lingdxh_' + i3 +'">' + xh3 + '</td>');//序号
+            	table3.push('<td class="ht-head" width="22.5%" nowrap="" id="lingdsz_' + i3 +'">' + leadership[i3].tSHORT + '</td>');//专业素质
+            	table3.push('<td class="ht-head" width="22.5%" nowrap="" id="lingdgw_' + i3 +'">' + leadership[i3].c_PROFC_TEXT + '</td>');//岗位要求
+            	
+            	//上级评估，直接传分数
+				var sjpg = "";
+				if(leadership[i3].p_PROFC_TEXT!=""){
+						if(leadership[i3].c_PROFCY!=""){
+							if(1*leadership[i3].p_PROFCY>=1*leadership[i3].c_PROFCY){
+							sjpg="绿色";
+						}else if(1*leadership[i3].c_PROFCY-1*leadership[i3].p_PROFCY<=1){
+							sjpg="黄色";
+						}else if(1*leadership[i3].c_PROFCY-1*leadership[i3].p_PROFCY>1){
+							sjpg="红色";
+						}
+					}
+					sjpg=leadership[i3].p_PROFC_TEXT;
+				}else{
+					sjpg="未测试";
+				}
+				table3.push('<td class="ht-head" width="22.5%" nowrap="" id="lingdsj_' + i3 +'">' + sjpg + '</td>');
+				
+				//自我评估
+				var zwpg = "";
+				if(leadership[i3].z_PROFC_TEXT!=""){
+					if(leadership[i3].c_PROFCY!=""){
+						if(1*leadership[i3].z_PROFCY>=1*leadership[i3].c_PROFCY){
+							zwpg="绿色";
+						}else if(1*leadership[i3].c_PROFCY-1*leadership[i3].z_PROFCY<=1){
+							zwpg="黄色";
+						}else if(1*leadership[i3].c_PROFCY-1*leadership[i3].z_PROFCY>1){
+							zwpg="红色";
+						}
+					}
+					zwpg=leadership[i3].z_PROFC_TEXT;
+				}else{
+					zwpg="未测试";
+				}
+				table3.push('<td class="ht-head" width="22.5%" nowrap="" id="lingdzw_' + i3 +'">' + zwpg + '</td></tr>');
+				
+            }
+            leadership_table.html(table3.join(""));
+        	
+            //2.专业技能
+            var skill = data["arrayOfQUALI_MATCH2"];//专业技能数据
+            var skill_table = jQuery("#skill_table");//对应表格
+            var table2 = [];
+            for (i2 = 0; i2 < skill.length; i2++) {		
+            	var xh2 = i2 + 1;
+            	table2.push('<tr><td class="ht-head" width="10%" nowrap="" id="jinxh_' + i2 +'">' + xh2 + '</td>');//序号
+            	table2.push('<td class="ht-head" width="22.5%" nowrap="" id="jinsz_' + i2 +'">' + skill[i2].tSHORT + '</td>');//专业素质
+            	table2.push('<td class="ht-head" width="22.5%" nowrap="" id="jingw_' + i2 +'">' + skill[i2].c_PROFC_TEXT + '</td>');//岗位要求
+            	
+            	//上级评估
+				var sjpg = "";
+				if(skill[i2].p_PROFCY!="0000"){
+				//	alert(skill[i2].p_PROFCY+"===="+skill[i2].c_PROFCY);
+						if(skill[i2].c_PROFCY!=""){
+							if(1*skill[i2].p_PROFCY>=1*skill[i2].c_PROFCY){
+							sjpg="绿色";
+						}else if(1*skill[i2].c_PROFCY-1*skill[i2].p_PROFCY<=1){
+							sjpg="黄色";
+						}else if(1*skill[i2].c_PROFCY-1*skill[i2].p_PROFCY>1){
+							sjpg="红色";
+						}
+					}
+				}else{
+					sjpg="未测试";
+				}
+				table2.push('<td class="ht-head" width="22.5%" nowrap="" id="jinsj_' + i2 +'">' + sjpg + '</td>');
+				
+				//自我评估
+				var zwpg = "";
+				if(skill[i2].z_PROFCY!="0000"){
+					if(skill[i2].c_PROFCY!=""){
+						if(1*skill[i2].z_PROFCY>=1*skill[i2].c_PROFCY){
+							zwpg="绿色";
+						}else if(1*skill[i2].c_PROFCY-1*skill[i2].z_PROFCY<=1){
+							zwpg="黄色";
+						}else if(1*skill[i2].c_PROFCY-1*skill[i2].z_PROFCY>1){
+							zwpg="红色";
+						}
+					}
+				}else{
+					zwpg="未测试";
+				}
+				table2.push('<td class="ht-head" width="22.5%" nowrap="" id="jinzw_' + i2 +'">' + zwpg + '</td></tr>');
+            	
+            }
+            skill_table.html(table2.join(""));
+            
+        	//3.专业素质
+            var diathesis = data["arrayOfQUALI_MATCH3"];//专业素质数据
+            var diathesis_table = jQuery("#diathesis_table");//对应表格
+            var table = [];
+			//alert("size::"+diathesis.length);
+            for (i = 0; i < diathesis.length; i++) {	
+            	var xh = i + 1;
+            	table.push('<tr><td class="ht-head" width="10%" nowrap="" id="suzxh_' + i +'">' + xh + '</td>');//序号
+				table.push('<td class="ht-head" width="22.5%" nowrap="" id="suzsz_' + i +'">' + diathesis[i].tSHORT + '</td>');//专业素质
+				table.push('<td class="ht-head" width="22.5%" nowrap="" id="suzgw_' + i +'">' + diathesis[i].c_PROFC_TEXT + '</td>');//岗位要求
+				
+				//上级评估
+				var sjpg = "";
+				if(diathesis[i].p_PROFCY!="0000"){
+						if(diathesis[i].c_PROFCY!=""){
+							if(1*diathesis[i].p_PROFCY>=1*diathesis[i].c_PROFCY){
+							sjpg="绿色";
+						}else if(1*diathesis[i].c_PROFCY-1*diathesis[i].p_PROFCY<=1){
+							sjpg="黄色";
+						}else if(1*diathesis[i].c_PROFCY-1*diathesis[i].p_PROFCY>1){
+							sjpg="红色";
+						}
+					}
+				}else{
+					sjpg="未测试";
+				}
+				table.push('<td class="ht-head" width="22.5%" nowrap="" id="suzsj_' + i +'">' + sjpg + '</td>');
+				
+				//自我评估
+				var zwpg = "";
+				if(diathesis[i].z_PROFCY!="0000"){
+					if(diathesis[i].c_PROFCY!=""){
+						if(1*diathesis[i].z_PROFCY>=1*diathesis[i].c_PROFCY){
+							zwpg="绿色";
+						}else if(1*diathesis[i].c_PROFCY-1*diathesis[i].z_PROFCY<=1){
+							zwpg="黄色";
+						}else if(1*diathesis[i].c_PROFCY-1*diathesis[i].z_PROFCY>1){
+							zwpg="红色";
+						}
+					}
+				}else{
+					zwpg="未测试";
+				}
+				table.push('<td class="ht-head" width="22.5%" nowrap="" id="suzzw_' + i +'">' + zwpg + '</td></tr>');
+				
+            }
+            diathesis_table.html(table.join(""));
+            
+            try{giveHimSomeColorSeeSee();}catch(e){}
+            
+        }
+    });
+});
+
+function giveHimSomeColorSeeSee(){
+	//1.领导力
+/*	$("#leadership_table").find("tr").each(function(){
+		var tdArr = $(this).children();
+		var shangjpg1 = tdArr.eq(3).html();//上级评估
+        var ziwpg1 = tdArr.eq(4).html();//自我评估
+        if(shangjpg1=="未测试"){
+			tdArr.eq(3).css("background-color", "white");
+		}else if(shangjpg1=="绿色"){
+			tdArr.eq(3).css("background-color", "green");
+		}else if(shangjpg1=="黄色"){
+			tdArr.eq(3).css("background-color", "yellow");
+		}else if(shangjpg1=="红色"){
+			tdArr.eq(3).css("background-color", "red");
+		}
+		if(ziwpg1=="未测试"){
+			tdArr.eq(4).css("background-color", "white");
+		}else if(ziwpg1=="绿色"){
+			tdArr.eq(4).css("background-color", "green");
+		}else if(ziwpg1=="黄色"){
+			tdArr.eq(4).css("background-color", "yellow");
+		}else if(ziwpg1=="红色"){
+			tdArr.eq(4).css("background-color", "red");
+		}
+	});*/
+	//2.专业技能
+	$("#skill_table").find("tr").each(function(){
+		var tdArr = $(this).children();
+		var shangjpg1 = tdArr.eq(3).html();//上级评估
+        var ziwpg1 = tdArr.eq(4).html();//自我评估
+        if(shangjpg1=="未测试"){
+			tdArr.eq(3).css("background-color", "white");
+		}else if(shangjpg1=="绿色"){
+			tdArr.eq(3).css("background-color", "green");
+		}else if(shangjpg1=="黄色"){
+			tdArr.eq(3).css("background-color", "yellow");
+		}else if(shangjpg1=="红色"){
+			tdArr.eq(3).css("background-color", "red");
+		}
+		if(ziwpg1=="未测试"){
+			tdArr.eq(4).css("background-color", "white");
+		}else if(ziwpg1=="绿色"){
+			tdArr.eq(4).css("background-color", "green");
+		}else if(ziwpg1=="黄色"){
+			tdArr.eq(4).css("background-color", "yellow");
+		}else if(ziwpg1=="红色"){
+			tdArr.eq(4).css("background-color", "red");
+		}
+	});
+	//3.专业素质
+	$("#diathesis_table").find("tr").each(function(){
+		var tdArr = $(this).children();
+		var shangjpg1 = tdArr.eq(3).html();//上级评估
+        var ziwpg1 = tdArr.eq(4).html();//自我评估
+        if(shangjpg1=="未测试"){
+			tdArr.eq(3).css("background-color", "white");
+		}else if(shangjpg1=="绿色"){
+			tdArr.eq(3).css("background-color", "green");
+		}else if(shangjpg1=="黄色"){
+			tdArr.eq(3).css("background-color", "yellow");
+		}else if(shangjpg1=="红色"){
+			tdArr.eq(3).css("background-color", "red");
+		}
+		if(ziwpg1=="未测试"){
+			tdArr.eq(4).css("background-color", "white");
+		}else if(ziwpg1=="绿色"){
+			tdArr.eq(4).css("background-color", "green");
+		}else if(ziwpg1=="黄色"){
+			//alert("aaaaaaa");
+			tdArr.eq(4).css("background-color", "yellow");
+		}else if(ziwpg1=="红色"){
+			//alert("ddddd");
+			tdArr.eq(4).css("background-color", "red");
+		}
+	});
+}

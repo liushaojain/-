@@ -1,0 +1,35 @@
+@CHARSET "UTF-8";
+
+.moduleTitle,.trhead {
+	background-color: #d7e3f4;
+}
+
+.head-right {
+	text-align: right;
+	font-family: sans-serif;
+}
+
+.headers {
+	color: #365e9f;
+	font-weight: bold;
+}
+
+.ht-head {
+	text-align: center;
+	font-weight: 500;
+	height: 40px;
+}
+.gw-head {
+	font-weight: bold;
+	text-align: center;
+	font-size: 18px;
+	background-color: #EEEEEE;
+}
+
+.gw-foot {
+	text-align: center;
+}
+
+.gwyq-message {
+	background-color: #EEEEEE;
+}

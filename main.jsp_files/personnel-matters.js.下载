@@ -1,0 +1,207 @@
+//document.write("<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>");
+
+jQuery(document).ready(function(){
+    jQuery.ajax({
+        type:"GET",
+        url:"/hc/getResume1.jsp?p="+jQuery("#p").val(),
+        dataType:"json",
+        success : function(data){
+            var contracts = data["contracts"];	//合同数据
+            var ht_table = jQuery("#ht_table");	//合同表格
+            var table = [];
+            for (i = 0; i < contracts.length; i++) {		
+            	var xh = i + 1;
+            	table.push('<tr><td class="ht-head" width="3%" nowrap="" id="htxh_' + i +'">' + xh + '</td>'); 								//合同序号
+				table.push('<td class="ht-head" width="8%" nowrap="" id="htqdrq_' + i +'">' + contracts[i]["startDate"] + '</td>');			//合同签订日期
+				table.push('<td class="ht-head" width="8%" nowrap="" id="htjsrq_' + i +'">' + contracts[i]["endDate"] + '</td>');			//合同结束日期
+				table.push('<td class="ht-head" width="6%" nowrap="" id="htlx_' + i +'">' + contracts[i]["type"] + '</td>');				//合同类型
+				table.push('<td class="ht-head" width="10%" nowrap="" id="htbh_' + i +'">' + contracts[i]["contractNo"] + '</td>');			//合同编号
+				table.push('<td class="ht-head" width="6%" nowrap="" id="htqlx_' + i +'">' + contracts[i]["contractDateType"] + '</td>');	//合同期类型
+				table.push('<td class="ht-head" width="6%" nowrap="" id="htqx_' + i +'">' + contracts[i]["contractRange"] + '</td>');		//合同期限
+				table.push('<td class="ht-head" width="6%" nowrap="" id="htzt_' + i +'">' + contracts[i]["status"] + '</td></tr>');			//合同状态
+            }
+            ht_table.html(table.join(""));
+            
+            var employeeBaseInfo = data["employeeBaseInfo"];				//人事信息
+            jQuery("#grxm").text(employeeBaseInfo[0]["name"]);				//姓名
+            jQuery("#grxb").text(employeeBaseInfo[0]["sex"]);				//性别
+            jQuery("#grcsrq").text(employeeBaseInfo[0]["birthDate"]);		//出生日期
+            jQuery("#grmz").text(employeeBaseInfo[0]["race"]);				//民族
+            jQuery("#grjg").text(employeeBaseInfo[0]["homeTown"]);			//籍贯
+            jQuery("#grhyzk").text(employeeBaseInfo[0]["contDura"]);		//婚姻状况
+            jQuery("#grwhcd").text(employeeBaseInfo[0]["knowledgelevel"]);	//文化程度
+            jQuery("#grbyyx").text(employeeBaseInfo[0]["school"]);			//毕业院校
+            jQuery("#grrzrq").text(employeeBaseInfo[0]["entryDate"]);		//入职日期
+            jQuery("#grsfzh").text(employeeBaseInfo[0]["personalId"]);		//身份证号
+            jQuery("#grjtzz").text(employeeBaseInfo[0]["address"]);			//家庭住址
+            
+            
+            var workExperience = data["workExperience"];	//个人履历
+            var ll_table = jQuery("#ll_table");			//履历表格
+            var l_table = [];
+            for (i = 0; i < workExperience.length; i++) {	
+            	var xh = i + 1;
+            	l_table.push('<tr><td class="ht-head" width="3%" nowrap="" id="gzxh_' + i +'">' + xh + '</td>'); 							//序号
+            	l_table.push('<td class="ht-head" width="8%" nowrap="" id="gzkxrq_' + i +'">' + workExperience[i]["startDate"] + '</td>');	//开始日期
+            	l_table.push('<td class="ht-head" width="8%" nowrap="" id="gzjsrq_' + i +'">' + workExperience[i]["endDate"] + '</td>');	//结束日期
+            	l_table.push('<td class="ht-head" width="6%" nowrap="" id="gzlllx_' + i +'">' + workExperience[i]["type"] + '</td>');		//履历类型
+            	l_table.push('<td class="ht-head" width="10%" nowrap="" id="gzgs_' + i +'">' + workExperience[i]["company"] + '</td>');		//公司
+            	l_table.push('<td class="ht-head" width="6%" nowrap="" id="gzbm_' + i +'">' + workExperience[i]["department"] + '</td>');	//部门
+            	l_table.push('<td class="ht-head" width="6%" nowrap="" id="gzzw_' + i +'">' + workExperience[i]["jobTitle"] + '</td>');		//职务
+            	l_table.push('<td class="ht-head" width="6%" nowrap="" id="gzzj_' + i +'">' + workExperience[i]["level"] + '</td></tr>');	//职级
+            }
+            ll_table.html(l_table.join(""));
+            
+            
+            var performance = data["performance"];	//绩效信息
+            var jx_table = jQuery("#jx_table");			//绩效表格
+            var jxtable = [];
+            for (i = 0; i < performance.length; i++) {			
+            	var xh = i + 1;
+            	jxtable.push('<tr><td class="ht-head" width="3%" nowrap="" id="jxxh_' + i +'">' + xh + '</td>'); 							//序号
+            	jxtable.push('<td class="ht-head" width="8%" nowrap="" id="jxksrq_' + i +'">' + performance[i]["startDate"] + '</td>');		//开始日期
+            	jxtable.push('<td class="ht-head" width="8%" nowrap="" id="jxjsrq_' + i +'">' + performance[i]["endDate"] + '</td>');		//结束日期
+            	jxtable.push('<td class="ht-head" width="6%" nowrap="" id="jxgs_' + i +'">' + performance[i]["company"] + '</td>');			//公司
+            	jxtable.push('<td class="ht-head" width="10%" nowrap="" id="jxbm_' + i +'">' + performance[i]["department"] + '</td>');		//部门
+            	jxtable.push('<td class="ht-head" width="6%" nowrap="" id="jxzw_' + i +'">' + performance[i]["jobTitle"] + '</td>');		//职位
+            	jxtable.push('<td class="ht-head" width="6%" nowrap="" id="jxkhdf_' + i +'">' + performance[i]["score"] + '</td>');			//考核得分
+            	jxtable.push('<td class="ht-head" width="6%" nowrap="" id="jxkhdj_' + i +'">' + performance[i]["level"] + '</td></tr>');	//考核等级
+            }
+            jx_table.html(jxtable.join(""));
+            
+            
+            jQuery("#zzgh").text(employeeBaseInfo[0]["gh"]);		//工号
+            jQuery("#zzrsfw").text(employeeBaseInfo[0]["rsfw"]);	//人事范围
+            jQuery("#zzrszfw").text(employeeBaseInfo[0]["rszfw"]);	//人事子范围
+            jQuery("#zzygz").text(employeeBaseInfo[0]["ygz"]);		//员工组
+            jQuery("#zzygzz").text(employeeBaseInfo[0]["ygzz"]);	//员工子组
+            jQuery("#zzzw").text(employeeBaseInfo[0]["jobTitle"]);	//职位
+            jQuery("#zzgzfw").text(employeeBaseInfo[0]["gzfw"]);	//工资范围
+            jQuery("#zzjxfs").text(employeeBaseInfo[0]["jxfs"]);	//计薪方式
+            jQuery("#zzzx").text(employeeBaseInfo[0]["zx"]);		//职衔
+            jQuery("#zzzj").text(employeeBaseInfo[0]["zj"]);		//职级
+            jQuery("#zzrlcbgj").text(employeeBaseInfo[0]["rlcbgj"]);//人力成本归集
+			jQuery("#zzbm").text(employeeBaseInfo[0]["dept"]);  //部门
+			
+			jQuery("#gwyggh").text(employeeBaseInfo[0]["gh"]);//发展信息-工号
+            jQuery("#gwygxm").text(employeeBaseInfo[0]["name"]);//发展信息-姓名
+            jQuery("#gwssgs").text(employeeBaseInfo[0]["rszfw"]);//发展信息-公司
+            jQuery("#gwssbm").text(employeeBaseInfo[0]["dept"]);//发展信息-部门
+            
+            var reward = data["reward"];	//奖惩
+            var reward_html = [];
+            var reward_table = jQuery("#reward");			
+            for (i = 0; i < reward.length; i++) {	
+            	var xh = i + 1;
+            	reward_html.push('<tr><td class="ht-head" width="3%" nowrap="" id="jcxh_' + i +'">' + xh + '</td>'); 					//序号
+            	reward_html.push('<td class="ht-head" width="8%" nowrap="" id="jcksrq_' + i +'">' + reward[i]["startDate"] + '</td>');	//开始日期
+            	reward_html.push('<td class="ht-head" width="8%" nowrap="" id="jcjsrq_' + i +'">' + reward[i]["endDate"] + '</td>');	//结束日期
+            	reward_html.push('<td class="ht-head" width="6%" nowrap="" id="jcjlhcf_' + i +'">' + reward[i]["isPunish"] + '</td>');	//奖励或惩罚
+            	reward_html.push('<td class="ht-head" width="10%" nowrap="" id="jclx_' + i +'">' + reward[i]["type"] + '</td>');		//奖惩类型
+            	reward_html.push('<td class="ht-head" width="6%" nowrap="" id="jcnr_' + i +'">' + reward[i]["content"] + '</td>');		//奖惩内容
+            	reward_html.push('<td class="ht-head" width="6%" nowrap="" id="jcje_' + i +'">' + reward[i]["amount"] + '</td>');		//奖惩金额
+            	reward_html.push('<td class="ht-head" width="6%" nowrap="" id="jczfr_' + i +'">' + reward[i]["executor"] + '</td><td width="57%"></td></tr>');//执法人
+            }
+            reward_table.html(reward_html.join(""));
+            
+            var salary = data["salary"];	//调薪
+            var salary_html = [];
+            var salary_table = jQuery("#salary_table");
+            for (i = 0; i < salary.length; i++) {
+            	var xh = i + 1;
+            	salary_html.push('<tr><td class="ht-head" width="5%" nowrap="" id="xjxh_' + i + '">' + xh + '</td>');
+            	salary_html.push('<td class="ht-head" width="8%" nowrap="" id="xjtxrq_' + i + '">' + salary[i]["adjustDate"] + '</td>');
+            	salary_html.push('<td class="ht-head" width="8%" nowrap="" id="xjtxyy_' + i + '">' + salary[i]["reason"] + '</td>');
+            	salary_html.push('<td class="ht-head" width="6%" nowrap="" id="xjtxqbm_' + i + '">' + salary[i]["beforeDept"] + '</td>');
+            	salary_html.push('<td class="ht-head" width="6%" nowrap="" id="xjtxqdx_' + i + '">' + salary[i]["beforeSalary"] + '</td>');
+            	salary_html.push('<td class="ht-head" width="6%" nowrap="" id="xjtxhbm_' + i + '">' + salary[i]["afterDept"] + '</td>');
+            	salary_html.push('<td class="ht-head" width="6%" nowrap="" id="xjtxqydx_' + i + '">' + salary[i]["afterSalary"] + '</td>');
+            	salary_html.push('<td width="45%"></td></tr>');
+            }
+            salary_table.html(salary_html.join(""));
+            
+            
+            var promote = data["promote"];  //晋升
+            var promote_html = [];
+            var promote_table = jQuery("#promote_table");
+            for (i = 0; i < promote.length; i++) {
+            	var xh = i + 1;
+            	promote_html.push('<tr><td class="ht-head" width="3%" nowrap="" id="jsxh_' + i + '">' + xh + '</td>');
+            	promote_html.push('<td class="ht-head" width="5%" nowrap="" id="jsddrq_' + i + '">' + promote[i]["adjustDate"] + '</td>');
+            	promote_html.push('<td class="ht-head" width="6%" nowrap="" id="jsddlx_' + i + '">' + promote[i]["type"] + '</td>');
+            	promote_html.push('<td class="ht-head" width="6%" nowrap="" id="jsddyy_' + i + '">' + promote[i]["reason"] + '</td>');
+            	promote_html.push('<td class="ht-head" width="6%" nowrap="" id="jsybm_' + i + '">' + promote[i]["originalDepartment"] + '</td>');
+            	promote_html.push('<td class="ht-head" width="6%" nowrap="" id="jsyzw_' + i + '">' + promote[i]["originalJobTitle"] + '</td>');
+            	promote_html.push('<td class="ht-head" width="6%" nowrap="" id="jsyjb_' + i + '">' + promote[i]["originalLevel"] + '</td>');
+            	promote_html.push('<td class="ht-head" width="6%" nowrap="" id="jsxbm_' + i + '">' + promote[i]["department"] + '</td>');
+            	promote_html.push('<td class="ht-head" width="6%" nowrap="" id="jsxzw_' + i + '">' + promote[i]["jobTitle"] + '</td>');
+            	promote_html.push('<td class="ht-head" width="6%" nowrap="" id="jsxjb_' + i + '">' + promote[i]["level"] + '</td>');
+            	promote_html.push('<td width="44%"></td></tr>');
+            }
+            promote_table.html(promote_html.join(""));
+            
+            
+            var training = data["training"];
+            var training_html = [];
+            var training_table = jQuery("#training_table");
+            for (i = 0; i < training.length; i++) {
+            	var xh = i + 1;
+            	training_html.push('<tr><td class="ht-head" width="3%" nowrap="" id="pxxh_' + i + '">' + xh + '</td>');
+            	training_html.push('<td class="ht-head" width="5%" nowrap="" id="pxksrq_' + i + '">' + training[i]["startDate"] + '</td>');
+            	training_html.push('<td class="ht-head" width="6%" nowrap="" id="pxjsrq_' + i + '">' + training[i]["endDate"] + '</td>');
+            	training_html.push('<td class="ht-head" width="6%" nowrap="" id="pxcj_' + i + '">' + training[i]["level"] + '</td>');
+            	training_html.push('<td class="ht-head" width="6%" nowrap="" id="pxdd_' + i + '">' + training[i]["address"] + '</td>');
+            	training_html.push('<td class="ht-head" width="6%" nowrap="" id="pxjs_' + i + '">' + training[i]["teacher"] + '</td>');
+            	training_html.push('<td class="ht-head" width="6%" nowrap="" id="pxkcmc_' + i + '">' + training[i]["lessonName"] + '</td>');
+            	training_html.push('<td class="ht-head" width="6%" nowrap="" id="pxsj_' + i + '">' + training[i]["hours"] + '</td>');
+            	training_html.push('<td width="54%"></td></tr>');
+            }
+            training_table.html(training_html.join(""));
+
+
+            var projectInfo = data["projectInfo"];
+            var xmls_tablehtml = [];
+            var projectHistory = projectInfo["projectHistory"];
+            var xmls_table = jQuery("#xmls_table");
+            if(projectHistory != null && projectHistory != undefined) {
+                for (var i = 0; i < projectHistory.length; i++) {
+                    xmls_tablehtml.push('<tr><td class="ht-head" width="3%" nowrap="" id="XMBH_' + i + '">' + projectHistory[i]["XMBH"] + '</td>');
+                    xmls_tablehtml.push('<td class="ht-head" width="5%" nowrap="" id="XMMC_' + i + '">' + projectHistory[i]["XMMC"] + '</td>');
+                    xmls_tablehtml.push('<td class="ht-head" width="6%" nowrap="" id="XMJS_' + i + '">' + projectHistory[i]["XMJS"] + '</td>');
+                    xmls_tablehtml.push('<td class="ht-head" width="6%" nowrap="" id="XMJSZZ_' + i + '">' + projectHistory[i]["XMJSZZ"] + '</td>');
+                    xmls_tablehtml.push('<td class="ht-head" width="6%" nowrap="" id="XMPF_' + i + '">' + projectHistory[i]["XMPF"] + '</td>');
+                    xmls_tablehtml.push('<td class="ht-head" width="6%" nowrap="" id="XMGRPF_' + i + '">' + projectHistory[i]["XMGRPF"] + '</td>');
+                    xmls_tablehtml.push('<td class="ht-head" width="6%" nowrap="" id="GRXMKSSJ_' + i + '">' + projectHistory[i]["GRXMKSSJ"] + '</td>');
+                    xmls_tablehtml.push('<td class="ht-head" width="6%" nowrap="" id="GRXMJSSJ_' + i + '">' + projectHistory[i]["GRXMJSSJ"] + '</td>');
+                    xmls_tablehtml.push('<td class="ht-head" width="6%" nowrap="" id="XMKSSJ_' + i + '">' + projectHistory[i]["XMKSSJ"] + '</td>');
+                    xmls_tablehtml.push('<td class="ht-head" width="6%" nowrap="" id="XMJSSJ_' + i + '">' + projectHistory[i]["XMJSSJ"] + '</td>');
+                    xmls_tablehtml.push('<td width="54%"></td></tr>');
+                }
+                xmls_table.html(xmls_tablehtml.join(""));
+            }
+
+            var xmjl_tablehtml = [];
+            var projectExperience = projectInfo["projectExperience"];
+            var xmjl_table = jQuery("#xmjl_table");
+            if(projectExperience != null && projectExperience != undefined){
+                for (var i = 0; i < projectExperience.length; i++) {
+                xmjl_tablehtml.push('<tr><td class="ht-head" width="3%" nowrap="" id="XMKCBH_' + i + '">' + projectExperience[i]["XMKCBH"] + '</td>');
+                xmjl_tablehtml.push('<td class="ht-head" width="5%" nowrap="" id="XMKCMC_' + i + '">' + projectExperience[i]["XMKCMC"] + '</td>');
+                xmjl_tablehtml.push('<td class="ht-head" width="6%" nowrap="" id="GLXMBH_' + i + '">' + projectExperience[i]["GLXMBH"] + '</td>');
+                xmjl_tablehtml.push('<td class="ht-head" width="6%" nowrap="" id="GLXMMC_' + i + '">' + projectExperience[i]["GLXMMC"] + '</td>');
+                xmjl_tablehtml.push('<td class="ht-head" width="6%" nowrap="" id="RZKCTGFS_' + i + '">' + projectExperience[i]["RZKCTGFS"] + '</td>');
+                xmjl_tablehtml.push('<td class="ht-head" width="6%" nowrap="" id="RZKCTGSJ_' + i + '">' + projectExperience[i]["RZKCTGSJ"] + '</td>');
+                xmjl_tablehtml.push('<td class="ht-head" width="6%" nowrap="" id="XMRZXX_' + i + '">' + projectExperience[i]["XMRZXX"] + '</td>');
+                xmjl_tablehtml.push('<td width="54%"></td></tr>');
+				}
+				xmjl_table.html(xmjl_tablehtml.join(""));
+            }
+            
+
+
+
+
+            
+        }
+    });
+});
